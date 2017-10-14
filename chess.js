@@ -3,30 +3,147 @@ var ctx = c.getContext("2d");
 
 initBoard();
 
-function clickListener(evt){
-  if(evt.clientY < 70){
-    move(0, getCol(0, evt.clientX));
-  }else if(evt.clientY > 70 && evt.clientY < 140){
-    move(1, getCol(1, evt.clientX));
-  }else if(evt.clientY > 140 && evt.clientY < 210){
-    move(2, getCol(2, evt.clientX));
-  }else if(evt.clientY > 210 && evt.clientY < 280){
-    move(3, getCol(3, evt.clientX));
-  }else if(evt.clientY > 280 && evt.clientY < 350){
-    move(4, getCol(4, evt.clientX));
-  }else if(evt.clientY > 350 && evt.clientY < 420){
-    move(5, getCol(5, evt.clientX));
-  }else if(evt.clientY > 420 && evt.clientY < 490){
-    move(6, getCol(6, evt.clientX));
-  }else if(evt.clientY > 490 && evt.clientY < 560){
-    move(7, getCol(7, evt.clientX));
-  }
+
+
+
+function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
+    if(selection.team === destination.team ){
+        console.log("user tried to caputure their own piece. Invalid");
+        return false;
+    }
+
+    if(oldRow === newRow && oldCol === newCol){
+        console.log('no move');
+        return false;
+    }
+    switch (selection.type) {
+        case 'rook':
+            if(oldCol != newCol && oldRow != newRow){
+                console.log('failed rook');
+                return false;
+            }
+            return true;
+        case 'pawn':
+            if(oldCol !== newCol){
+                if( !((oldCol === newCol + 1 || oldCol=== newCol - 1) && destination.team != selection.team) ){
+                    return false;
+                }
+            }
+            var spaces = 1;
+            if(selection.moved === false){
+                spaces = 2;
+            }
+            if(selection.team){
+                if(newRow < oldRow + spaces){
+                    return true;
+                }
+            }
+            else{
+                if(newRow < oldRow + spaces){
+                    return true;
+                }
+            }
+            return true;
+        default:
+            return false;
+    }
 }
 
 
 
 function initBoard() {
   arrayBoard();
+
+  var me = this;
+  this.c.addEventListener('click',function(evt){
+      if(me.currentSelection===false){
+          console.log('no selection');
+
+          if(evt.clientY < 70){
+              me.currentSelection = {row:0,col:getCol(0, evt.clientX)};
+          }else if(evt.clientY > 70 && evt.clientY < 140){
+              me.currentSelection = {row:1,col:getCol(1, evt.clientX)};
+          }else if(evt.clientY > 140 && evt.clientY < 210){
+              me.currentSelection = {row:2,col:getCol(2, evt.clientX)};
+
+          }else if(evt.clientY > 210 && evt.clientY < 280){
+              me.currentSelection = {row:3,col:getCol(3, evt.clientX)};
+
+          }else if(evt.clientY > 280 && evt.clientY < 350){
+              me.currentSelection = {row:4,col:getCol(4, evt.clientX)};
+
+          }else if(evt.clientY > 350 && evt.clientY < 420){
+              me.currentSelection = {row:5,col:getCol(5, evt.clientX)};
+
+          }else if(evt.clientY > 420 && evt.clientY < 490){
+              me.currentSelection = {row:6,col:getCol(6, evt.clientX)};
+
+          }else if(evt.clientY > 490 && evt.clientY < 560){
+              me.currentSelection = {row:7,col:getCol(7, evt.clientX)};
+          }
+          var selection = me.boardPieces[me.currentSelection.row][me.currentSelection.col];
+          if(me.currentMove !== selection.team){
+              me.currentSelection = false;
+              return false;
+          }
+          me.currentMove = !me.currentMove;
+
+          return true;
+      }
+      else{
+          console.log('selection', me.currentSelection);
+
+          if(evt.clientY < 70){
+            newX = 0;
+            newY = getCol(0, evt.clientX);
+          }else if(evt.clientY > 70 && evt.clientY < 140){
+            newX = 1;
+            newY = getCol(1, evt.clientX);
+          }else if(evt.clientY > 140 && evt.clientY < 210){
+            newX = 2;
+            newY = getCol(2, evt.clientX);
+          }else if(evt.clientY > 210 && evt.clientY < 280){
+            newX = 3;
+            newY = getCol(3, evt.clientX);
+          }else if(evt.clientY > 280 && evt.clientY < 350){
+            newX = 4;
+            newY = getCol(4, evt.clientX);
+          }else if(evt.clientY > 350 && evt.clientY < 420){
+            newX = 5;
+            newY = getCol(5, evt.clientX);
+          }else if(evt.clientY > 420 && evt.clientY < 490){
+            newX = 6;
+            newY = getCol(6, evt.clientX);
+          }else if(evt.clientY > 490 && evt.clientY < 560){
+            newX = 7;
+            newY = getCol(7, evt.clientX);
+          }
+
+          var selection = me.boardPieces[me.currentSelection.row][me.currentSelection.col];
+
+          if(validMove(me.currentSelection.row, me.currentSelection.col, newX, newY, selection, me.boardPieces[newX][newY])){
+              console.log('valid');
+              if(selection.type === 'king'){
+
+                  console.log('win condition!');
+                  return true;
+              }
+              me.boardPieces[newX][newY] = {piece:selection.piece};
+
+              selection.piece = null;
+              selection.type = null;
+              selection.team = null;
+              me.currentSelection = false;
+
+              render_board();
+              return true;
+
+          }
+
+      }
+
+
+  },false);
 
 
   render_board();
@@ -70,14 +187,15 @@ function getCol(y, x){
 }
 
 function arrayBoard(){
+    //add team and type to every object
 this.boardPieces = [
-  [{piece:'blackRook'},{piece:'blackKnight'},{piece:'blackBishop'},{piece:'blackQueen'},{piece:'blackKing'},{piece:'blackBishop'},{piece:'blackKnight'},{piece:'blackRook'}],
+  [{piece:'blackRook', type: 'rook', team: true},{piece:'blackKnight'},{piece:'blackBishop', team: true},{piece:'blackQueen'},{piece:'blackKing'},{piece:'blackBishop'},{piece:'blackKnight'},{piece:'blackRook'}],
   [{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
-  [{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'}],
+  [{piece:'whitePawn', type:'pawn', team: false, moved: false},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'}],
   [{piece:'whiteRook'},{piece:'whiteKnight'},{piece:'whiteBishop'},{piece:'whiteQueen'},{piece:'whiteKing'},{piece:'whiteBishop'},{piece:'whiteKnight'},{piece:'whiteRook'}]
 ];
 
@@ -92,6 +210,8 @@ this.coordPieces = [
   [{x:10, y: 500},{x:80, y: 500},{x:150, y: 500},{x:220, y: 500},{x:290, y: 500},{x:360, y: 500},{x:430, y: 500},{x:500, y: 500}],
 ];
 this.images = [];
+this.currentSelection = false;
+this.currentMove = true;
 }
 
 
@@ -112,16 +232,21 @@ function render_board(){
 
 
       for(var a = 0; a < 8; a++) {
-        for(var b = 0; b < 8; b += 2) {
+        for(var b = 0; b < 8; b++) {
           startX = b * 70;
-          if(a % 2 == 0) startX = (b + 1) * 70;
-            ctx.fillStyle="#A56732";
+          if((b + a) % 2 == 0) //startX = (b + 1) * 70;
+          {
+              ctx.fillStyle="#FFFFFF";
+          }else{
+              ctx.fillStyle="#A56732";
+
+          }
             ctx.fillRect(startX + left,(a * 70) , 70, 70);
         }
       }
     }
-    this.c.addEventListener('click',clickListener,false);
-    
+
+
   }
 
   console.log(this.boardPieces);
@@ -150,46 +275,7 @@ function move(initialX, initialY){
   var newY;
   var me = this;
   c.addEventListener('click',function(evt){
-    if(evt.clientY < 70){
-      newX = 0;
-      newY = getCol(0, evt.clientX);
-    }else if(evt.clientY > 70 && evt.clientY < 140){
-      newX = 1;
-      newY = getCol(1, evt.clientX);
-    }else if(evt.clientY > 140 && evt.clientY < 210){
-      newX = 2;
-      newY = getCol(2, evt.clientX);
-    }else if(evt.clientY > 210 && evt.clientY < 280){
-      newX = 3;
-      newY = getCol(3, evt.clientX);
-    }else if(evt.clientY > 280 && evt.clientY < 350){
-      newX = 4;
-      newY = getCol(4, evt.clientX);
-    }else if(evt.clientY > 350 && evt.clientY < 420){
-      newX = 5;
-      newY = getCol(5, evt.clientX);
-    }else if(evt.clientY > 420 && evt.clientY < 490){
-      newX = 6;
-      newY = getCol(6, evt.clientX);
-    }else if(evt.clientY > 490 && evt.clientY < 560){
-      newX = 7;
-      newY = getCol(7, evt.clientX);
-    }
 
-
-    me.boardPieces[newX][newY] = {piece:me.boardPieces[initialX][initialY].piece};
-    me.boardPieces[initialX][initialY] = {piece: null};
-
-    //console.log(me);
-    //me.c.addEventListener('click',me.clickListener,false);
-
-
-    //me.boardPieces[initialX][initialY].piece = null;
-
-
-
-
-    render_board();
 
   },false);
 }
