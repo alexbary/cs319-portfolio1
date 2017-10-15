@@ -5,254 +5,250 @@ initBoard();
 
 function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
     if(selection.team === destination.team ){
-        console.log("user tried to caputure their own piece. Invalid");
+        console.log("User tried to caputure their own piece. Invalid");
         return false;
     }
 
     if(oldRow === newRow && oldCol === newCol){
-        console.log('no move');
+        console.log('No move');
         return false;
     }
     switch (selection.type) {
-        case 'rook':
-            if(oldCol != newCol && oldRow != newRow){
-                console.log('failed rook');
-                return false;
-            }
-
-            if(oldCol != newCol){
-              //checking row
-              if(newCol > oldCol){
-                //moving to the right
-                for(var i = oldCol + 1; i < 8; i++){
-                  if(this.boardPieces[i].piece != null && i < newCol){
-                    return false;
-                  }
-                }
-              }else{
-                //moving to the left
-                for(var i = oldCol - 1; i >= 0; i--){
-                  if(this.boardPieces[i].piece != null && i > newCol){
-                    return false;
-                  }
-                }
-              }
-            }else if(oldRow != newRow){
-              //checking col
-              if(newRow > oldRow){
-                //moving down
-                for(var i = oldRow + 1; i < 8; i++){
-                  if(this.boardPieces[i][oldCol].piece != null && i < newRow){
-                    return false;
-                  }
-                }
-              }else if(newCol < oldCol){
-                //moving up
-                for(var i = oldRow - 1; i >= 0; i--){
-                  if(this.boardPieces[oldCol][i].piece != null && i > newRow){
-                    return false;
-                  }
-                }
-              }
-            }
-            return true;
-        case 'knight':
-          //this.boardPieces[col][row].piece
-          console.log("Old Row: " + oldRow + " Old Col: " + oldCol + " New Row: " + newRow + " New Col: " + newCol);
-          if(newRow == (oldRow - 1) && newCol == (oldCol + 2)){
-            return true;
-          }else if(newRow == (oldRow + 1) && newCol == (oldCol + 2)){
-            return true;
-          }else if(newRow == (oldRow + 2) && newCol == (oldCol + 1)){
-            return true;
-          }else if(newRow == (oldRow + 2) && newCol == (oldCol - 1)){
-            return true;
-          }else if(newRow == (oldRow - 1) && newCol == (oldCol - 2)){
-            return true;
-          }else if(newRow == (oldRow + 1) && newCol == (oldCol - 2)){
-            return true;
-          }else if(newRow == (oldRow - 2) && newCol == (oldCol - 1)){
-            return true;
-          }else if(newRow == (oldRow - 2) && newCol == (oldCol + 1)){
-            return true;
-          }
+      case 'rook':
+        if(oldCol != newCol && oldRow != newRow){
           return false;
-        case 'bishop':
-          var vertical = 'up';
-          var horizontal = 'left';
-          if(oldCol === newCol || oldRow === newRow){
+        }
+
+        if(oldCol != newCol){
+          //checking row
+          if(newCol > oldCol){
+            //moving to the right
+            for(var i = oldCol + 1; i < 8; i++){
+              if(this.boardPieces[i].piece != null && i < newCol){
+                return false;
+              }
+            }
+          }else{
+            //moving to the left
+            for(var i = oldCol - 1; i >= 0; i--){
+              if(this.boardPieces[i].piece != null && i > newCol){
+                return false;
+              }
+            }
+          }
+        }else if(oldRow != newRow){
+          //checking col
+          if(newRow > oldRow){
+            //moving down
+            for(var i = oldRow + 1; i < 8; i++){
+              if(this.boardPieces[i][oldCol].piece != null && i < newRow){
+                return false;
+              }
+            }
+          }else if(newCol < oldCol){
+            //moving up
+            for(var i = oldRow - 1; i >= 0; i--){
+              if(this.boardPieces[oldCol][i].piece != null && i > newRow){
+                return false;
+              }
+            }
+          }
+        }
+        return true;
+      case 'knight':
+        if(newRow == (oldRow - 1) && newCol == (oldCol + 2)){
+          return true;
+        }else if(newRow == (oldRow + 1) && newCol == (oldCol + 2)){
+          return true;
+        }else if(newRow == (oldRow + 2) && newCol == (oldCol + 1)){
+          return true;
+        }else if(newRow == (oldRow + 2) && newCol == (oldCol - 1)){
+          return true;
+        }else if(newRow == (oldRow - 1) && newCol == (oldCol - 2)){
+          return true;
+        }else if(newRow == (oldRow + 1) && newCol == (oldCol - 2)){
+          return true;
+        }else if(newRow == (oldRow - 2) && newCol == (oldCol - 1)){
+          return true;
+        }else if(newRow == (oldRow - 2) && newCol == (oldCol + 1)){
+          return true;
+        }
+        return false;
+      case 'bishop':
+        var vertical = 'up';
+        var horizontal = 'left';
+        if(oldCol === newCol || oldRow === newRow){
+          return false;
+        }
+        if(oldCol < newCol){
+          horizontal = 'right';
+        }
+        if(oldRow < newRow){
+          vertical = 'down';
+        }
+
+        var isValid = false;
+        var i, j;
+
+        if(vertical === 'up' && horizontal === 'left'){
+          j = oldRow - 1;
+          for(i = oldCol - 1; i > newCol && j > newRow; i--, j-- ){
+            if(this.boardPieces[j][i].piece){
+              return false;
+            }
+          }
+        }else if(vertical === 'down' && horizontal === 'right'){
+          j = oldRow + 1;
+          for(i = oldCol + 1; i < newCol && j < newRow; i++, j++ ){
+            if(this.boardPieces[j][i].piece){
+              return false;
+            }
+          }
+        }else if(vertical === 'up' && horizontal === 'right'){
+          j = oldRow - 1;
+          for(i = oldCol + 1; i < newCol && j > newRow; i++, j-- ){
+            if(this.boardPieces[j][i].piece){
+              return false;
+            }
+          }
+        }else if(vertical === 'down' && horizontal === 'left'){
+          j = oldRow + 1;
+          for(i = oldCol - 1; i > newCol && j < newRow; i--, j++ ){
+            if(this.boardPieces[j][i].piece){
+              return false;
+            }
+          }
+        }
+        if(i === newCol && j === newRow){
+          return true;
+        }
+        return false;
+      case 'queen':
+        var vertical = 'up';
+        var horizontal = 'left';
+        if(oldCol === newCol || oldRow === newRow){
+          if(oldCol != newCol){
+            //checking row
+            if(newCol > oldCol){
+              //moving to the right
+              for(var i = oldCol + 1; i < 8; i++){
+                if(this.boardPieces[i].piece != null && i < newCol){
+                  return false;
+                }
+              }
+            }else{
+              //moving to the left
+              for(var i = oldCol - 1; i >= 0; i--){
+                if(this.boardPieces[i].piece != null && i > newCol){
+                  return false;
+                }
+              }
+            }
+          }else if(oldRow != newRow){
+            //checking col
+            if(newRow > oldRow){
+              //moving down
+              for(var i = oldRow + 1; i < 8; i++){
+                if(this.boardPieces[i][oldCol].piece != null && i < newRow){
+                  return false;
+                }
+              }
+            }else if(newCol < oldCol){
+              //moving up
+              for(var i = oldRow - 1; i >= 0; i--){
+                if(this.boardPieces[oldCol][i].piece != null && i > newRow){
+                  return false;
+                }
+              }
+            }
+          }
+          return true;
+        }
+        if(oldCol < newCol){
+          horizontal = 'right';
+        }
+        if(oldRow < newRow){
+          vertical = 'down';
+        }
+
+        var isValid = false;
+        var i, j;
+
+        if(vertical === 'up' && horizontal === 'left'){
+          j = oldRow - 1;
+          for(i = oldCol - 1; i > newCol && j > newRow; i--, j-- ){
+            if(this.boardPieces[j][i].piece){
+              return false;
+            }
+          }
+        }else if(vertical === 'down' && horizontal === 'right'){
+          j = oldRow + 1;
+          for(i = oldCol + 1; i < newCol && j < newRow; i++, j++ ){
+            if(this.boardPieces[j][i].piece){
+              return false;
+            }
+          }
+        }else if(vertical === 'up' && horizontal === 'right'){
+          j = oldRow - 1;
+          for(i = oldCol + 1; i < newCol && j > newRow; i++, j-- ){
+            if(this.boardPieces[j][i].piece){
+              return false;
+            }
+          }
+        }else if(vertical === 'down' && horizontal === 'left'){
+          j = oldRow + 1;
+          for(i = oldCol - 1; i > newCol && j < newRow; i--, j++ ){
+            if(this.boardPieces[j][i].piece){
+
+              return false;
+            }
+          }
+        }
+        if(i === newCol && j === newRow){
+          return true;
+        }
+        return false;
+      case 'king':
+        if(newRow == (oldRow - 1) && newCol == (oldCol + 1)){
+          return true;
+        }else if(newRow == oldRow && newCol == (oldCol + 1)){
+          return true;
+        }else if(newRow == (oldRow + 1) && newCol == (oldCol + 1)){
+          return true;
+        }else if(newRow == (oldRow + 1) && newCol == oldCol){
+          return true;
+        }else if(newRow == (oldRow + 1) && newCol == (oldCol - 1)){
+          return true;
+        }else if(newRow == oldRow && newCol == (oldCol - 1)){
+          return true;
+        }else if(newRow == (oldRow - 1) && newCol == (oldCol - 1)){
+          return true;
+        }else if(newRow == (oldRow - 1) && newCol == oldCol){
+          return true;
+        }
+        return false;
+      case 'pawn':
+        if(oldCol !== newCol){
+          if( !((oldCol === newCol + 1 || oldCol=== newCol - 1) && destination.team != selection.team) ){
             return false;
           }
-          if(oldCol < newCol){
-            horizontal = 'right';
-          }
-          if(oldRow < newRow){
-            vertical = 'down';
-          }
-
-          var isValid = false;
-          var i, j;
-
-          if(vertical === 'up' && horizontal === 'left'){
-            j = oldRow - 1;
-            for(i = oldCol - 1; i > newCol && j > newRow; i--, j-- ){
-              if(this.boardPieces[j][i].piece){
-                return false;
-              }
-            }
-          }else if(vertical === 'down' && horizontal === 'right'){
-            j = oldRow + 1;
-            for(i = oldCol + 1; i < newCol && j < newRow; i++, j++ ){
-              if(this.boardPieces[j][i].piece){
-                return false;
-              }
-            }
-          }else if(vertical === 'up' && horizontal === 'right'){
-            j = oldRow - 1;
-            for(i = oldCol + 1; i < newCol && j > newRow; i++, j-- ){
-              if(this.boardPieces[j][i].piece){
-                return false;
-              }
-            }
-          }else if(vertical === 'down' && horizontal === 'left'){
-            j = oldRow + 1;
-            for(i = oldCol - 1; i > newCol && j < newRow; i--, j++ ){
-              if(this.boardPieces[j][i].piece){
-                return false;
-              }
-            }
-          }
-          if(i === newCol && j === newRow){
+        }
+        var spaces = 1;
+        if(selection.moved === false){
+          spaces = 2;
+        }
+        if(selection.team){
+          if(newRow < oldRow + spaces){
             return true;
           }
-          return false;
-        case 'queen':
-          var vertical = 'up';
-          var horizontal = 'left';
-          if(oldCol === newCol || oldRow === newRow){
-            if(oldCol != newCol){
-              //checking row
-              if(newCol > oldCol){
-                //moving to the right
-                for(var i = oldCol + 1; i < 8; i++){
-                  if(this.boardPieces[i].piece != null && i < newCol){
-                    return false;
-                  }
-                }
-              }else{
-                //moving to the left
-                for(var i = oldCol - 1; i >= 0; i--){
-                  if(this.boardPieces[i].piece != null && i > newCol){
-                    return false;
-                  }
-                }
-              }
-            }else if(oldRow != newRow){
-              //checking col
-              if(newRow > oldRow){
-                //moving down
-                for(var i = oldRow + 1; i < 8; i++){
-                  if(this.boardPieces[i][oldCol].piece != null && i < newRow){
-                    return false;
-                  }
-                }
-              }else if(newCol < oldCol){
-                //moving up
-                for(var i = oldRow - 1; i >= 0; i--){
-                  if(this.boardPieces[oldCol][i].piece != null && i > newRow){
-                    return false;
-                  }
-                }
-              }
-            }
+        }else{
+          if(newRow < oldRow + spaces){
             return true;
           }
-          if(oldCol < newCol){
-            horizontal = 'right';
-          }
-          if(oldRow < newRow){
-            vertical = 'down';
-          }
-
-          var isValid = false;
-          var i, j;
-
-          if(vertical === 'up' && horizontal === 'left'){
-            j = oldRow - 1;
-            for(i = oldCol - 1; i > newCol && j > newRow; i--, j-- ){
-              if(this.boardPieces[j][i].piece){
-                return false;
-              }
-            }
-          }else if(vertical === 'down' && horizontal === 'right'){
-            j = oldRow + 1;
-            for(i = oldCol + 1; i < newCol && j < newRow; i++, j++ ){
-              if(this.boardPieces[j][i].piece){
-                return false;
-              }
-            }
-          }else if(vertical === 'up' && horizontal === 'right'){
-            j = oldRow - 1;
-            for(i = oldCol + 1; i < newCol && j > newRow; i++, j-- ){
-              if(this.boardPieces[j][i].piece){
-                return false;
-              }
-            }
-          }else if(vertical === 'down' && horizontal === 'left'){
-            j = oldRow + 1;
-            for(i = oldCol - 1; i > newCol && j < newRow; i--, j++ ){
-              if(this.boardPieces[j][i].piece){
-
-                return false;
-              }
-            }
-          }
-          if(i === newCol && j === newRow){
-            return true;
-          }
-          return false;
-        case 'king':
-          if(newRow == (oldRow - 1) && newCol == (oldCol + 1)){
-            return true;
-          }else if(newRow == oldRow && newCol == (oldCol + 1)){
-            return true;
-          }else if(newRow == (oldRow + 1) && newCol == (oldCol + 1)){
-            return true;
-          }else if(newRow == (oldRow + 1) && newCol == oldCol){
-            return true;
-          }else if(newRow == (oldRow + 1) && newCol == (oldCol - 1)){
-            return true;
-          }else if(newRow == oldRow && newCol == (oldCol - 1)){
-            return true;
-          }else if(newRow == (oldRow - 1) && newCol == (oldCol - 1)){
-            return true;
-          }else if(newRow == (oldRow - 1) && newCol == oldCol){
-            return true;
-          }
-          return false;
-        case 'pawn':
-            if(oldCol !== newCol){
-                if( !((oldCol === newCol + 1 || oldCol=== newCol - 1) && destination.team != selection.team) ){
-                    return false;
-                }
-            }
-            var spaces = 1;
-            if(selection.moved === false){
-                spaces = 2;
-            }
-            if(selection.team){
-                if(newRow < oldRow + spaces){
-                    return true;
-                }
-            }
-            else{
-                if(newRow < oldRow + spaces){
-                    return true;
-                }
-            }
-            return true;
-        default:
-            return false;
+        }
+        return true;
+      default:
+        return false;
     }
 }
 
@@ -262,7 +258,6 @@ function initBoard() {
   var me = this;
   this.c.addEventListener('click',function(evt){
     if(me.currentSelection===false){
-      console.log('no selection');
 
       if(evt.clientY < 70){
           me.currentSelection = {row:0,col:getCol(0, evt.clientX)};
@@ -270,33 +265,26 @@ function initBoard() {
           me.currentSelection = {row:1,col:getCol(1, evt.clientX)};
       }else if(evt.clientY > 140 && evt.clientY < 210){
           me.currentSelection = {row:2,col:getCol(2, evt.clientX)};
-
       }else if(evt.clientY > 210 && evt.clientY < 280){
           me.currentSelection = {row:3,col:getCol(3, evt.clientX)};
-
       }else if(evt.clientY > 280 && evt.clientY < 350){
           me.currentSelection = {row:4,col:getCol(4, evt.clientX)};
-
       }else if(evt.clientY > 350 && evt.clientY < 420){
           me.currentSelection = {row:5,col:getCol(5, evt.clientX)};
-
       }else if(evt.clientY > 420 && evt.clientY < 490){
           me.currentSelection = {row:6,col:getCol(6, evt.clientX)};
-
       }else if(evt.clientY > 490 && evt.clientY < 560){
           me.currentSelection = {row:7,col:getCol(7, evt.clientX)};
       }
+
       var selection = me.boardPieces[me.currentSelection.row][me.currentSelection.col];
       if(me.currentMove !== selection.team){
           me.currentSelection = false;
           return false;
       }
       me.currentMove = !me.currentMove;
-
       return true;
     }else{
-      console.log('selection', me.currentSelection);
-
       if(evt.clientY < 70){
         newX = 0;
         newY = getCol(0, evt.clientX);
