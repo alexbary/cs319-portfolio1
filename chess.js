@@ -229,7 +229,9 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
         return false;
       case 'pawn':
         if(oldCol !== newCol){
-          if( !((oldCol === newCol + 1 || oldCol=== newCol - 1) && destination.team != selection.team) ){
+          if( (oldCol === newCol + 1 || oldCol === newCol - 1) && destination.team !== null && destination.team !== undefined  && destination.team !== selection.team ){
+            return true;
+          }else{
             return false;
           }
         }
@@ -237,16 +239,21 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
         if(selection.moved === false){
           spaces = 2;
         }
+
+        if(destination.piece){
+          return false;
+        }
+
         if(selection.team){
-          if(newRow < oldRow + spaces){
+          if(newRow > oldRow && newRow <= oldRow + spaces){
             return true;
           }
         }else{
-          if(newRow < oldRow + spaces){
+          if(newRow < oldRow && newRow >= oldRow - spaces){
             return true;
           }
         }
-        return true;
+        return false;
       default:
         return false;
     }
