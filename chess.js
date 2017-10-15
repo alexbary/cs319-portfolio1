@@ -3,9 +3,6 @@ var ctx = c.getContext("2d");
 
 initBoard();
 
-
-
-
 function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
     if(selection.team === destination.team ){
         console.log("user tried to caputure their own piece. Invalid");
@@ -22,7 +19,51 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
                 console.log('failed rook');
                 return false;
             }
+
+            if(oldCol != newCol){
+              //checking row
+              if(newCol > oldCol){
+                //moving to the right
+                for(var i = oldCol + 1; i < 8; i++){
+                  if(this.boardPieces[i].piece != null && i < newCol){
+                    return false;
+                  }
+                }
+              }else{
+                //moving to the left
+                for(var i = oldCol - 1; i >= 0; i--){
+                  if(this.boardPieces[i].piece != null && i > newCol){
+                    return false;
+                  }
+                }
+              }
+            }else if(oldRow != newRow){
+              //checking col
+              if(newRow > oldRow){
+                //moving down
+                for(var i = oldRow + 1; i < 8; i++){
+                  if(this.boardPieces[i][oldCol].piece != null && i < newRow){
+                    return false;
+                  }
+                }
+              }else if(newCol < oldCol){
+                //moving up
+                for(var i = oldRow - 1; i >= 0; i--){
+                  if(this.boardPieces[oldCol][i].piece != null && i > newRow){
+                    return false;
+                  }
+                }
+              }
+            }
             return true;
+        case 'knight':
+          return true;
+        case 'bishop':
+          return true;
+        case 'queen':
+          return true;
+        case 'king':
+          return true;
         case 'pawn':
             if(oldCol !== newCol){
                 if( !((oldCol === newCol + 1 || oldCol=== newCol - 1) && destination.team != selection.team) ){
@@ -152,71 +193,23 @@ function initBoard() {
 
 function getCol(y, x){
   if(x < 70){
-    console.log(y + ", 0");
-    console.log(this.boardPieces[y][0].piece);
     return 0;
   }else if(x > 70 && x < 140){
-    console.log(y + ", 1");
-    console.log(this.boardPieces[y][1].piece);
     return 1;
   }else if(x > 140 && x < 210){
-    console.log(y + ", 2");
-    console.log(this.boardPieces[y][2].piece);
     return 2;
   }else if(x > 210 && x < 280){
-    console.log(y + ", 3");
-    console.log(this.boardPieces[y][3].piece);
     return 3;
   }else if(x > 280 && x < 350){
-    console.log(y + ", 4");
-    console.log(this.boardPieces[y][4].piece);
     return 4;
   }else if(x > 350 && x < 420){
-    console.log(y + ", 5");
-    console.log(this.boardPieces[y][5].piece);
     return 5;
   }else if(x > 420 && x < 490){
-    console.log(y + ", 6");
-    console.log(this.boardPieces[y][6].piece);
     return 6;
   }else if(x > 490 && x < 560){
-    console.log(y + ", 7");
-    console.log(this.boardPieces[y][7].piece);
     return 7;
   }
 }
-
-function arrayBoard(){
-    //add team and type to every object
-this.boardPieces = [
-  [{piece:'blackRook', type: 'rook', team: true},{piece:'blackKnight'},{piece:'blackBishop', team: true},{piece:'blackQueen'},{piece:'blackKing'},{piece:'blackBishop'},{piece:'blackKnight'},{piece:'blackRook'}],
-  [{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'},{piece:'blackPawn'}],
-  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
-  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
-  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
-  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
-  [{piece:'whitePawn', type:'pawn', team: false, moved: false},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'},{piece:'whitePawn'}],
-  [{piece:'whiteRook'},{piece:'whiteKnight'},{piece:'whiteBishop'},{piece:'whiteQueen'},{piece:'whiteKing'},{piece:'whiteBishop'},{piece:'whiteKnight'},{piece:'whiteRook'}]
-];
-
-this.coordPieces = [
-  [{x:10, y: 10},{x:80, y: 10},{x:150, y: 10},{x:220, y: 10},{x:290, y: 10},{x:360, y: 10},{x:430, y: 10},{x:500, y: 10}],
-  [{x:10, y: 80},{x:80, y: 80},{x:150, y: 80},{x:220, y: 80},{x:290, y: 80},{x:360, y: 80},{x:430, y: 80},{x:500, y: 80}],
-  [{x:10, y: 150},{x:80, y: 150},{x:150, y: 150},{x:220, y: 150},{x:290, y: 150},{x:360, y: 150},{x:430, y: 150},{x:500, y: 150}],
-  [{x:10, y: 220},{x:80, y: 220},{x:150, y: 220},{x:220, y: 220},{x:290, y: 220},{x:360, y: 220},{x:430, y: 220},{x:500, y: 220}],
-  [{x:10, y: 290},{x:80, y: 290},{x:150, y: 290},{x:220, y: 290},{x:290, y: 290},{x:360, y: 290},{x:430, y: 290},{x:500, y: 290}],
-  [{x:10, y: 360},{x:80, y: 360},{x:150, y: 360},{x:220, y: 360},{x:290, y: 360},{x:360, y: 360},{x:430, y: 360},{x:500, y: 360}],
-  [{x:10, y: 430},{x:80, y: 430},{x:150, y: 430},{x:220, y: 430},{x:290, y: 430},{x:360, y: 430},{x:430, y: 430},{x:500, y: 430}],
-  [{x:10, y: 500},{x:80, y: 500},{x:150, y: 500},{x:220, y: 500},{x:290, y: 500},{x:360, y: 500},{x:430, y: 500},{x:500, y: 500}],
-];
-this.images = [];
-this.currentSelection = false;
-this.currentMove = true;
-}
-
-
-
-
 
 function render_board(){
   for(i = 0; i < 8; i++){
@@ -245,11 +238,8 @@ function render_board(){
         }
       }
     }
-
-
   }
 
-  console.log(this.boardPieces);
   for(var i = 0; i < 8; i++){
     for(var j = 0; j < 8; j++){
       if(this.boardPieces[i][j].piece !== null){
@@ -269,8 +259,6 @@ function addPieces(piece, x, y){
 }
 
 function move(initialX, initialY){
-  console.log("X: " + initialX + " Y: " + initialY);
-
   var newX;
   var newY;
   var me = this;
@@ -278,4 +266,32 @@ function move(initialX, initialY){
 
 
   },false);
+}
+
+function arrayBoard(){
+    //black team is true, white team is false
+this.boardPieces = [
+  [{piece:'blackRook', type:'rook', team:true},{piece:'blackKnight', type:'knight', team:true},{piece:'blackBishop', type:'bishop', team: true},{piece:'blackQueen', type:'queen', team:true},{piece:'blackKing', type:'king', team:true},{piece:'blackBishop', type:'bishop', team:true},{piece:'blackKnight', type:'knight', team:true},{piece:'blackRook', type:'rook', team:true}],
+  [{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false}],
+  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
+  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
+  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
+  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
+  [{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false}],
+  [{piece:'whiteRook', type:'rook', team:false},{piece:'whiteKnight', type:'knight', team:false},{piece:'whiteBishop', type:'bishop', team:false},{piece:'whiteQueen', type:'queen', team:false},{piece:'whiteKing', type:'king', team:false},{piece:'whiteBishop', type:'bishop', team:false},{piece:'whiteKnight', type:'knight', team:false},{piece:'whiteRook', type:'rook', team:false}]
+];
+
+this.coordPieces = [
+  [{x:10, y: 10},{x:80, y: 10},{x:150, y: 10},{x:220, y: 10},{x:290, y: 10},{x:360, y: 10},{x:430, y: 10},{x:500, y: 10}],
+  [{x:10, y: 80},{x:80, y: 80},{x:150, y: 80},{x:220, y: 80},{x:290, y: 80},{x:360, y: 80},{x:430, y: 80},{x:500, y: 80}],
+  [{x:10, y: 150},{x:80, y: 150},{x:150, y: 150},{x:220, y: 150},{x:290, y: 150},{x:360, y: 150},{x:430, y: 150},{x:500, y: 150}],
+  [{x:10, y: 220},{x:80, y: 220},{x:150, y: 220},{x:220, y: 220},{x:290, y: 220},{x:360, y: 220},{x:430, y: 220},{x:500, y: 220}],
+  [{x:10, y: 290},{x:80, y: 290},{x:150, y: 290},{x:220, y: 290},{x:290, y: 290},{x:360, y: 290},{x:430, y: 290},{x:500, y: 290}],
+  [{x:10, y: 360},{x:80, y: 360},{x:150, y: 360},{x:220, y: 360},{x:290, y: 360},{x:360, y: 360},{x:430, y: 360},{x:500, y: 360}],
+  [{x:10, y: 430},{x:80, y: 430},{x:150, y: 430},{x:220, y: 430},{x:290, y: 430},{x:360, y: 430},{x:430, y: 430},{x:500, y: 430}],
+  [{x:10, y: 500},{x:80, y: 500},{x:150, y: 500},{x:220, y: 500},{x:290, y: 500},{x:360, y: 500},{x:430, y: 500},{x:500, y: 500}],
+];
+this.images = [];
+this.currentSelection = false;
+this.currentMove = true;
 }
