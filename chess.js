@@ -256,101 +256,96 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
     }
 }
 
-
-
 function initBoard() {
   arrayBoard();
 
   var me = this;
   this.c.addEventListener('click',function(evt){
-      if(me.currentSelection===false){
-          console.log('no selection');
+    if(me.currentSelection===false){
+      console.log('no selection');
 
-          if(evt.clientY < 70){
-              me.currentSelection = {row:0,col:getCol(0, evt.clientX)};
-          }else if(evt.clientY > 70 && evt.clientY < 140){
-              me.currentSelection = {row:1,col:getCol(1, evt.clientX)};
-          }else if(evt.clientY > 140 && evt.clientY < 210){
-              me.currentSelection = {row:2,col:getCol(2, evt.clientX)};
+      if(evt.clientY < 70){
+          me.currentSelection = {row:0,col:getCol(0, evt.clientX)};
+      }else if(evt.clientY > 70 && evt.clientY < 140){
+          me.currentSelection = {row:1,col:getCol(1, evt.clientX)};
+      }else if(evt.clientY > 140 && evt.clientY < 210){
+          me.currentSelection = {row:2,col:getCol(2, evt.clientX)};
 
-          }else if(evt.clientY > 210 && evt.clientY < 280){
-              me.currentSelection = {row:3,col:getCol(3, evt.clientX)};
+      }else if(evt.clientY > 210 && evt.clientY < 280){
+          me.currentSelection = {row:3,col:getCol(3, evt.clientX)};
 
-          }else if(evt.clientY > 280 && evt.clientY < 350){
-              me.currentSelection = {row:4,col:getCol(4, evt.clientX)};
+      }else if(evt.clientY > 280 && evt.clientY < 350){
+          me.currentSelection = {row:4,col:getCol(4, evt.clientX)};
 
-          }else if(evt.clientY > 350 && evt.clientY < 420){
-              me.currentSelection = {row:5,col:getCol(5, evt.clientX)};
+      }else if(evt.clientY > 350 && evt.clientY < 420){
+          me.currentSelection = {row:5,col:getCol(5, evt.clientX)};
 
-          }else if(evt.clientY > 420 && evt.clientY < 490){
-              me.currentSelection = {row:6,col:getCol(6, evt.clientX)};
+      }else if(evt.clientY > 420 && evt.clientY < 490){
+          me.currentSelection = {row:6,col:getCol(6, evt.clientX)};
 
-          }else if(evt.clientY > 490 && evt.clientY < 560){
-              me.currentSelection = {row:7,col:getCol(7, evt.clientX)};
+      }else if(evt.clientY > 490 && evt.clientY < 560){
+          me.currentSelection = {row:7,col:getCol(7, evt.clientX)};
+      }
+      var selection = me.boardPieces[me.currentSelection.row][me.currentSelection.col];
+      if(me.currentMove !== selection.team){
+          me.currentSelection = false;
+          return false;
+      }
+      me.currentMove = !me.currentMove;
+
+      return true;
+    }else{
+      console.log('selection', me.currentSelection);
+
+      if(evt.clientY < 70){
+        newX = 0;
+        newY = getCol(0, evt.clientX);
+      }else if(evt.clientY > 70 && evt.clientY < 140){
+        newX = 1;
+        newY = getCol(1, evt.clientX);
+      }else if(evt.clientY > 140 && evt.clientY < 210){
+        newX = 2;
+        newY = getCol(2, evt.clientX);
+      }else if(evt.clientY > 210 && evt.clientY < 280){
+        newX = 3;
+        newY = getCol(3, evt.clientX);
+      }else if(evt.clientY > 280 && evt.clientY < 350){
+        newX = 4;
+        newY = getCol(4, evt.clientX);
+      }else if(evt.clientY > 350 && evt.clientY < 420){
+        newX = 5;
+        newY = getCol(5, evt.clientX);
+      }else if(evt.clientY > 420 && evt.clientY < 490){
+        newX = 6;
+        newY = getCol(6, evt.clientX);
+      }else if(evt.clientY > 490 && evt.clientY < 560){
+        newX = 7;
+        newY = getCol(7, evt.clientX);
+      }
+
+      var selection = me.boardPieces[me.currentSelection.row][me.currentSelection.col];
+
+      if(validMove(me.currentSelection.row, me.currentSelection.col, newX, newY, selection, me.boardPieces[newX][newY])){
+        if(me.boardPieces[newX][newY].type === 'king'){
+          if(me.boardPieces[newX][newY].team == true){
+            alert("White team won!");
+          }else{
+            alert("Black team won!");
           }
-          var selection = me.boardPieces[me.currentSelection.row][me.currentSelection.col];
-          if(me.currentMove !== selection.team){
-              me.currentSelection = false;
-              return false;
-          }
-          me.currentMove = !me.currentMove;
-
           return true;
+        }
+        me.boardPieces[newX][newY] = {piece:selection.piece, type:selection.type, team:selection.team, moved:true};
+
+        selection.piece = null;
+        selection.type = null;
+        selection.team = null;
+        selection.moved = null;
+        me.currentSelection = false;
+
+        render_board();
+        return true;
       }
-      else{
-          console.log('selection', me.currentSelection);
-
-          if(evt.clientY < 70){
-            newX = 0;
-            newY = getCol(0, evt.clientX);
-          }else if(evt.clientY > 70 && evt.clientY < 140){
-            newX = 1;
-            newY = getCol(1, evt.clientX);
-          }else if(evt.clientY > 140 && evt.clientY < 210){
-            newX = 2;
-            newY = getCol(2, evt.clientX);
-          }else if(evt.clientY > 210 && evt.clientY < 280){
-            newX = 3;
-            newY = getCol(3, evt.clientX);
-          }else if(evt.clientY > 280 && evt.clientY < 350){
-            newX = 4;
-            newY = getCol(4, evt.clientX);
-          }else if(evt.clientY > 350 && evt.clientY < 420){
-            newX = 5;
-            newY = getCol(5, evt.clientX);
-          }else if(evt.clientY > 420 && evt.clientY < 490){
-            newX = 6;
-            newY = getCol(6, evt.clientX);
-          }else if(evt.clientY > 490 && evt.clientY < 560){
-            newX = 7;
-            newY = getCol(7, evt.clientX);
-          }
-
-          var selection = me.boardPieces[me.currentSelection.row][me.currentSelection.col];
-
-          if(validMove(me.currentSelection.row, me.currentSelection.col, newX, newY, selection, me.boardPieces[newX][newY])){
-              console.log('valid');
-              //fix win condition
-              // if(selection.type === 'king'){
-              //
-              //     console.log('win condition!');
-              //     return true;
-              // }
-              me.boardPieces[newX][newY] = {piece:selection.piece};
-
-              selection.piece = null;
-              selection.type = null;
-              selection.team = null;
-              me.currentSelection = false;
-
-              render_board();
-              return true;
-
-          }
-
-      }
-
-
+    }
   },false);
 
 
