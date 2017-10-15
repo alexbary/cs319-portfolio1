@@ -57,9 +57,75 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
             }
             return true;
         case 'knight':
-          return true;
+          //this.boardPieces[col][row].piece
+          console.log("Old Row: " + oldRow + " Old Col: " + oldCol + " New Row: " + newRow + " New Col: " + newCol);
+          if(newRow == (oldRow - 1) && newCol == (oldCol + 2)){
+            return true;
+          }else if(newRow == (oldRow + 1) && newCol == (oldCol + 2)){
+            return true;
+          }else if(newRow == (oldRow + 2) && newCol == (oldCol + 1)){
+            return true;
+          }else if(newRow == (oldRow + 2) && newCol == (oldCol - 1)){
+            return true;
+          }else if(newRow == (oldRow - 1) && newCol == (oldCol - 2)){
+            return true;
+          }else if(newRow == (oldRow + 1) && newCol == (oldCol - 2)){
+            return true;
+          }else if(newRow == (oldRow - 2) && newCol == (oldCol - 1)){
+            return true;
+          }else if(newRow == (oldRow - 2) && newCol == (oldCol + 1)){
+            return true;
+          }
+          return false;
         case 'bishop':
-          return true;
+          var vertical = 'up';
+          var horizontal = 'left';
+          if(oldCol === newCol || oldRow === newRow){
+            return false;
+          }
+          if(oldCol < newCol){
+            horizontal = 'right';
+          }
+          if(oldRow < newRow){
+            vertical = 'down';
+          }
+
+          var isValid = false;
+          var i, j;
+
+          if(vertical === 'up' && horizontal === 'left'){
+            j = oldRow - 1;
+            for(i = oldCol - 1; i > newCol && j > newRow; i--, j-- ){
+              if(this.boardPieces[j][i].type){
+                return false;
+              }
+            }
+          }else if(vertical === 'down' && horizontal === 'right'){
+            j = oldRow + 1;
+            for(i = oldCol + 1; i < newCol && j < newRow; i++, j++ ){
+              if(this.boardPieces[j][i].type){
+                return false;
+              }
+            }
+          }else if(vertical === 'up' && horizontal === 'right'){
+            j = oldRow - 1;
+            for(i = oldCol + 1; i < newCol && j > newRow; i++, j-- ){
+              if(this.boardPieces[j][i].type){
+                return false;
+              }
+            }
+          }else if(vertical === 'down' && horizontal === 'left'){
+            j = oldRow + 1;
+            for(i = oldCol - 1; i > newCol && j < newRow; i--, j++ ){
+              if(this.boardPieces[j][i].type){
+                return false;
+              }
+            }
+          }
+          if(i === newCol && j === newRow){
+            return true;
+          }
+          return false;
         case 'queen':
           return true;
         case 'king':
@@ -275,7 +341,7 @@ this.boardPieces = [
   [{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
-  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
+  [{piece:null},{piece:null},{piece:null},{piece:'blackKnight', type:'knight', team:true},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false}],
   [{piece:'whiteRook', type:'rook', team:false},{piece:'whiteKnight', type:'knight', team:false},{piece:'whiteBishop', type:'bishop', team:false},{piece:'whiteQueen', type:'queen', team:false},{piece:'whiteKing', type:'king', team:false},{piece:'whiteBishop', type:'bishop', team:false},{piece:'whiteKnight', type:'knight', team:false},{piece:'whiteRook', type:'rook', team:false}]
