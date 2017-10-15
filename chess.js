@@ -129,7 +129,24 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
         case 'queen':
           return true;
         case 'king':
-          return true;
+          if(newRow == (oldRow - 1) && newCol == (oldCol + 1)){
+            return true;
+          }else if(newRow == oldRow && newCol == (oldCol + 1)){
+            return true;
+          }else if(newRow == (oldRow + 1) && newCol == (oldCol + 1)){
+            return true;
+          }else if(newRow == (oldRow + 1) && newCol == oldCol){
+            return true;
+          }else if(newRow == (oldRow + 1) && newCol == (oldCol - 1)){
+            return true;
+          }else if(newRow == oldRow && newCol == (oldCol - 1)){
+            return true;
+          }else if(newRow == (oldRow - 1) && newCol == (oldCol - 1)){
+            return true;
+          }else if(newRow == (oldRow - 1) && newCol == oldCol){
+            return true;
+          }
+          return false;
         case 'pawn':
             if(oldCol !== newCol){
                 if( !((oldCol === newCol + 1 || oldCol=== newCol - 1) && destination.team != selection.team) ){
@@ -230,11 +247,11 @@ function initBoard() {
 
           if(validMove(me.currentSelection.row, me.currentSelection.col, newX, newY, selection, me.boardPieces[newX][newY])){
               console.log('valid');
-              if(selection.type === 'king'){
-
-                  console.log('win condition!');
-                  return true;
-              }
+              // if(selection.type === 'king'){
+              //
+              //     console.log('win condition!');
+              //     return true;
+              // }
               me.boardPieces[newX][newY] = {piece:selection.piece};
 
               selection.piece = null;
@@ -341,7 +358,7 @@ this.boardPieces = [
   [{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
-  [{piece:null},{piece:null},{piece:null},{piece:'blackKnight', type:'knight', team:true},{piece:null},{piece:null},{piece:null},{piece:null}],
+  [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false}],
   [{piece:'whiteRook', type:'rook', team:false},{piece:'whiteKnight', type:'knight', team:false},{piece:'whiteBishop', type:'bishop', team:false},{piece:'whiteQueen', type:'queen', team:false},{piece:'whiteKing', type:'king', team:false},{piece:'whiteBishop', type:'bishop', team:false},{piece:'whiteKnight', type:'knight', team:false},{piece:'whiteRook', type:'rook', team:false}]
