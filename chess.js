@@ -1,6 +1,8 @@
 var c = document.getElementById("myCanvas");
 var ctx = c.getContext("2d");
 
+var moves = [];
+
 initBoard();
 
 function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
@@ -14,7 +16,7 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
         return false;
     }
     switch (selection.type) {
-      case 'rook':
+      case 'R':
         if(oldCol != newCol && oldRow != newRow){
           return false;
         }
@@ -54,27 +56,36 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
             }
           }
         }
+        addMoveToArray("R" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
         return true;
-      case 'knight':
+      case 'N':
         if(newRow == (oldRow - 1) && newCol == (oldCol + 2)){
+          addMoveToArray("N" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow + 1) && newCol == (oldCol + 2)){
+          addMoveToArray("N" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow + 2) && newCol == (oldCol + 1)){
+          addMoveToArray("N" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow + 2) && newCol == (oldCol - 1)){
+          addMoveToArray("N" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow - 1) && newCol == (oldCol - 2)){
+          addMoveToArray("N" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow + 1) && newCol == (oldCol - 2)){
+          addMoveToArray("N" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow - 2) && newCol == (oldCol - 1)){
+          addMoveToArray("N" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow - 2) && newCol == (oldCol + 1)){
+          addMoveToArray("N" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }
         return false;
-      case 'bishop':
+      case 'B':
         var vertical = 'up';
         var horizontal = 'left';
         if(oldCol === newCol || oldRow === newRow){
@@ -120,10 +131,11 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
           }
         }
         if(i === newCol && j === newRow){
+          addMoveToArray("B" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }
         return false;
-      case 'queen':
+      case 'Q':
         var vertical = 'up';
         var horizontal = 'left';
         if(oldCol === newCol || oldRow === newRow){
@@ -162,6 +174,7 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
               }
             }
           }
+          addMoveToArray("Q" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }
         if(oldCol < newCol){
@@ -205,31 +218,41 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
           }
         }
         if(i === newCol && j === newRow){
+          addMoveToArray("Q" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }
         return false;
-      case 'king':
+      case 'K':
         if(newRow == (oldRow - 1) && newCol == (oldCol + 1)){
+          addMoveToArray("K" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == oldRow && newCol == (oldCol + 1)){
+          addMoveToArray("K" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow + 1) && newCol == (oldCol + 1)){
+          addMoveToArray("K" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow + 1) && newCol == oldCol){
+          addMoveToArray("K" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow + 1) && newCol == (oldCol - 1)){
+          addMoveToArray("K" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == oldRow && newCol == (oldCol - 1)){
+          addMoveToArray("K" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow - 1) && newCol == (oldCol - 1)){
+          addMoveToArray("K" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }else if(newRow == (oldRow - 1) && newCol == oldCol){
+          addMoveToArray("K" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
           return true;
         }
         return false;
-      case 'pawn':
+      case 'P':
         if(oldCol !== newCol){
           if( (oldCol === newCol + 1 || oldCol === newCol - 1) && destination.team !== null && destination.team !== undefined  && destination.team !== selection.team ){
+            addMoveToArray("P" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
             return true;
           }else{
             return false;
@@ -246,10 +269,12 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
 
         if(selection.team){
           if(newRow > oldRow && newRow <= oldRow + spaces){
+            addMoveToArray("P" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
             return true;
           }
         }else{
           if(newRow < oldRow && newRow >= oldRow - spaces){
+            addMoveToArray("P" + convertCol(oldCol) + convertRow(oldRow)+ convertCol(newCol) + convertRow(newRow));
             return true;
           }
         }
@@ -257,6 +282,51 @@ function validMove(oldRow, oldCol, newRow, newCol, selection, destination){
       default:
         return false;
     }
+}
+
+function addMoveToArray(move){
+  moves.push(move);
+  console.log(moves);
+}
+
+function convertRow(row){
+  if(row == 0){
+    return 8;
+  }else if(row == 1){
+    return 7;
+  }else if(row == 2){
+    return 6;
+  }else if(row == 3){
+    return 5;
+  }else if(row == 4){
+    return 4;
+  }else if(row == 5){
+    return 3;
+  }else if(row == 6){
+    return 2;
+  }else if(row == 7){
+    return 1;
+  }
+}
+
+function convertCol(col){
+  if(col == 0){
+    return 'a';
+  }else if(col == 1){
+    return 'b';
+  }else if(col == 2){
+    return 'c';
+  }else if(col == 3){
+    return 'd';
+  }else if(col == 4){
+    return 'e';
+  }else if(col == 5){
+    return 'f';
+  }else if(col == 6){
+    return 'g';
+  }else if(col == 7){
+    return 'h';
+  }
 }
 
 function initBoard() {
@@ -428,25 +498,25 @@ function move(initialX, initialY){
 function arrayBoard(){
     //black team is true, white team is false
 this.boardPieces = [
-  [{piece:'blackRook', type:'rook', team:true},{piece:'blackKnight', type:'knight', team:true},{piece:'blackBishop', type:'bishop', team: true},{piece:'blackQueen', type:'queen', team:true},{piece:'blackKing', type:'king', team:true},{piece:'blackBishop', type:'bishop', team:true},{piece:'blackKnight', type:'knight', team:true},{piece:'blackRook', type:'rook', team:true}],
-  [{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false},{piece:'blackPawn', type:'pawn', team:true, moved:false}],
+  [{piece:'blackRook', type:'R', team:true},{piece:'blackKnight', type:'N', team:true},{piece:'blackBishop', type:'B', team: true},{piece:'blackQueen', type:'Q', team:true},{piece:'blackKing', type:'K', team:true},{piece:'blackBishop', type:'B', team:true},{piece:'blackKnight', type:'N', team:true},{piece:'blackRook', type:'R', team:true}],
+  [{piece:'blackPawn', type:'P', team:true, moved:false},{piece:'blackPawn', type:'P', team:true, moved:false},{piece:'blackPawn', type:'P', team:true, moved:false},{piece:'blackPawn', type:'P', team:true, moved:false},{piece:'blackPawn', type:'P', team:true, moved:false},{piece:'blackPawn', type:'P', team:true, moved:false},{piece:'blackPawn', type:'P', team:true, moved:false},{piece:'blackPawn', type:'P', team:true, moved:false}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
   [{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null},{piece:null}],
-  [{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false},{piece:'whitePawn', type:'pawn', team:false, moved:false}],
-  [{piece:'whiteRook', type:'rook', team:false},{piece:'whiteKnight', type:'knight', team:false},{piece:'whiteBishop', type:'bishop', team:false},{piece:'whiteQueen', type:'queen', team:false},{piece:'whiteKing', type:'king', team:false},{piece:'whiteBishop', type:'bishop', team:false},{piece:'whiteKnight', type:'knight', team:false},{piece:'whiteRook', type:'rook', team:false}]
+  [{piece:'whitePawn', type:'P', team:false, moved:false},{piece:'whitePawn', type:'P', team:false, moved:false},{piece:'whitePawn', type:'P', team:false, moved:false},{piece:'whitePawn', type:'P', team:false, moved:false},{piece:'whitePawn', type:'P', team:false, moved:false},{piece:'whitePawn', type:'P', team:false, moved:false},{piece:'whitePawn', type:'P', team:false, moved:false},{piece:'whitePawn', type:'P', team:false, moved:false}],
+  [{piece:'whiteRook', type:'R', team:false},{piece:'whiteKnight', type:'N', team:false},{piece:'whiteBishop', type:'B', team:false},{piece:'whiteQueen', type:'Q', team:false},{piece:'whiteKing', type:'K', team:false},{piece:'whiteBishop', type:'B', team:false},{piece:'whiteKnight', type:'N', team:false},{piece:'whiteRook', type:'R', team:false}]
 ];
 
 this.coordPieces = [
-  [{x:10, y: 10},{x:80, y: 10},{x:150, y: 10},{x:220, y: 10},{x:290, y: 10},{x:360, y: 10},{x:430, y: 10},{x:500, y: 10}],
-  [{x:10, y: 80},{x:80, y: 80},{x:150, y: 80},{x:220, y: 80},{x:290, y: 80},{x:360, y: 80},{x:430, y: 80},{x:500, y: 80}],
-  [{x:10, y: 150},{x:80, y: 150},{x:150, y: 150},{x:220, y: 150},{x:290, y: 150},{x:360, y: 150},{x:430, y: 150},{x:500, y: 150}],
-  [{x:10, y: 220},{x:80, y: 220},{x:150, y: 220},{x:220, y: 220},{x:290, y: 220},{x:360, y: 220},{x:430, y: 220},{x:500, y: 220}],
-  [{x:10, y: 290},{x:80, y: 290},{x:150, y: 290},{x:220, y: 290},{x:290, y: 290},{x:360, y: 290},{x:430, y: 290},{x:500, y: 290}],
-  [{x:10, y: 360},{x:80, y: 360},{x:150, y: 360},{x:220, y: 360},{x:290, y: 360},{x:360, y: 360},{x:430, y: 360},{x:500, y: 360}],
-  [{x:10, y: 430},{x:80, y: 430},{x:150, y: 430},{x:220, y: 430},{x:290, y: 430},{x:360, y: 430},{x:430, y: 430},{x:500, y: 430}],
-  [{x:10, y: 500},{x:80, y: 500},{x:150, y: 500},{x:220, y: 500},{x:290, y: 500},{x:360, y: 500},{x:430, y: 500},{x:500, y: 500}],
+  [{x:10, y: 10, col: 'a', row: 8},{x:80, y: 10, col: 'b', row: 8},{x:150, y: 10, col: 'c', row: 8},{x:220, y: 10, col: 'd', row: 8},{x:290, y: 10, col: 'e', row: 8},{x:360, y: 10, col: 'f', row: 8},{x:430, y: 10, col: 'g', row: 8},{x:500, y: 10, col: 'h', row: 8}],
+  [{x:10, y: 80, col: 'a', row: 7},{x:80, y: 80, col: 'b', row: 7},{x:150, y: 80, col: 'c', row: 7},{x:220, y: 80, col: 'd', row: 7},{x:290, y: 80, col: 'e', row: 7},{x:360, y: 80, col: 'f', row: 7},{x:430, y: 80, col: 'g', row: 7},{x:500, y: 80, col: 'h', row: 7}],
+  [{x:10, y: 150, col: 'a', row: 6},{x:80, y: 150, col: 'b', row: 6},{x:150, y: 150, col: 'c', row: 6},{x:220, y: 150, col: 'd', row: 6},{x:290, y: 150, col: 'e', row: 6},{x:360, y: 150, col: 'f', row: 6},{x:430, y: 150, col: 'g', row: 6},{x:500, y: 150, col: 'h', row: 6}],
+  [{x:10, y: 220, col: 'a', row: 5},{x:80, y: 220, col: 'b', row: 5},{x:150, y: 220, col: 'c', row: 5},{x:220, y: 220, col: 'd', row: 4},{x:290, y: 220, col: 'e', row: 5},{x:360, y: 220, col: 'f', row: 5},{x:430, y: 220, col: 'g', row: 5},{x:500, y: 220, col: 'h', row: 5}],
+  [{x:10, y: 290, col: 'a', row: 4},{x:80, y: 290, col: 'b', row: 4},{x:150, y: 290, col: 'c', row: 4},{x:220, y: 290, col: 'd', row: 4},{x:290, y: 290, col: 'e', row: 4},{x:360, y: 290, col: 'f', row: 4},{x:430, y: 290, col: 'g', row: 4},{x:500, y: 290, col: 'h', row: 4}],
+  [{x:10, y: 360, col: 'a', row: 3},{x:80, y: 360, col: 'b', row: 3},{x:150, y: 360, col: 'c', row: 3},{x:220, y: 360, col: 'd', row: 3},{x:290, y: 360, col: 'e', row: 3},{x:360, y: 360, col: 'f', row: 3},{x:430, y: 360, col: 'g', row: 3},{x:500, y: 360, col: 'h', row: 3}],
+  [{x:10, y: 430, col: 'a', row: 2},{x:80, y: 430, col: 'b', row: 2},{x:150, y: 430, col: 'c', row: 2},{x:220, y: 430, col: 'd', row: 2},{x:290, y: 430, col: 'e', row: 2},{x:360, y: 430, col: 'f', row: 2},{x:430, y: 430, col: 'g', row: 2},{x:500, y: 430, col: 'h', row: 2}],
+  [{x:10, y: 500, col: 'a', row: 1},{x:80, y: 500, col: 'b', row: 1},{x:150, y: 500, col: 'c', row: 1},{x:220, y: 500, col: 'd', row: 1},{x:290, y: 500, col: 'e', row: 1},{x:360, y: 500, col: 'f', row: 1},{x:430, y: 500, col: 'g', row: 1},{x:500, y: 500, col: 'h', row: 1}],
 ];
 this.images = [];
 this.currentSelection = false;
