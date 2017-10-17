@@ -485,6 +485,16 @@ function addPieces(piece, x, y){
   }
 }
 
+function move(initialX, initialY){
+  var newX;
+  var newY;
+  var me = this;
+  c.addEventListener('click',function(evt){
+
+
+  },false);
+}
+
 function arrayBoard(){
     //black team is true, white team is false
 this.boardPieces = [
