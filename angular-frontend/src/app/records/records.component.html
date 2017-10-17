@@ -1,0 +1,32 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+	<br>
+	<h2>Records Table</h2>
+	<br>
+	<div class="card">
+		<div class="card-inside" style="overflow-x:auto;">
+			<!-- <h3>Records Table</h3> -->
+			<table>
+		    	<tr>
+		      		<th>Game ID </th>
+		      		<th>Player 1 </th>
+		      		<th>Player 2 </th>
+		      		<th>Whos Turn Is It </th>
+		      		<th>Who Won </th>
+		    	</tr>
+		    	<ng-container *ngFor="let game of table">
+			    	<tr>
+			    		<td>{{game.gameID}}</td>
+			    		<td>{{game.player1}}</td>
+			    		<td>{{game.player2}}</td>
+			    		<td>{{game.whosTurnIsIt}}</td>
+			    		<td>{{game.whoWon}}</td>
+			    	</tr>
+		    	</ng-container>
+			</table>
+		</div>
+	</div>
+</div>
+
+<app-footer></app-footer>

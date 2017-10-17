@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+	<div class="row">
+	  	<div class="col-md-4">
+	  		<br>
+	  		<div class="card">
+	  			<div class="card-inside">
+	  				<h5>Games In-Progress</h5>
+	  				<p>Below is a list of games you are in. Click on a game to switch to it. Note: due to a bug in the chess board, black goes first.</p>
+	  				<table>
+				    	<tr>
+				      		<th>Game ID </th>
+				      		<th>Who's Turn Is It </th>
+				    	</tr>
+				    	<ng-container *ngFor="let game of ongoingGames">
+					    	<tr (click)="switchTo(game.gameID)">
+					    		<td>{{game.gameID}}</td>
+					    		<td>{{game.whosTurnIsIt}}</td>
+					    	</tr>
+				    	</ng-container>
+					</table>
+	  			</div>
+	  		</div>
+	  	</div>
+	  	<div class="col-md-8">
+	  		<br>
+	  		<div class="card">
+	  			<div class="card-inside">
+	  				<div align="center">
+	  					<iframe src="http://localhost:80/319_portfolio_PHP/api/chess.html" height="565" width="565" style="border:none;" ></iframe>
+	  				</div>
+	  			</div>
+	  		</div>
+	  	</div>
+	</div>
+</div>
+
+<app-footer></app-footer>

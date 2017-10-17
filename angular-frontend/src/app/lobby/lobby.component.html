@@ -1,0 +1,51 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+	<div class="row">
+	  	<div class="col-md-4">
+	  		<br>
+	  		<div class="card">
+	  			<div class="card-inside">
+	  				<h5>Welcome</h5>
+	  				<h2>{{user}}</h2>
+	  				<!-- 
+	  				<ul style="list-style-type:none; padding-left:0;">
+						<li>Games Completed: </li>
+						<li>Games In-Progress: </li>
+					  	<li>Games Won: </li>
+					  	<li>Games Lost: </li>
+					  	<li>Stalemates: </li>
+					</ul> 
+					-->
+					<br>
+					<button [routerLink]="['/create']" mat-raised-button color="primary">New Game</button>
+	  			</div>
+	  		</div>
+	  	</div>
+	  	<div class="col-md-8">
+	  		<br>
+	  		<div class="card">
+	  			<div class="card-inside">
+	  				<h4>Available Games</h4>
+	  				<table>
+				    	<tr>
+				      		<th>Game ID </th>
+				      		<th>Opponent </th>
+				      		<th></th>
+				    	</tr>
+				    	<ng-container *ngFor="let game of availableGames">
+					    	<tr>
+					    		<td>{{game.gameID}}</td>
+					    		<td>{{game.player1}}</td>
+					    		<td style="text-align: right;"><button (click)="joinGame(game.gameID)" mat-button>Join Game</button></td>
+					    	</tr>
+				    	</ng-container>
+					</table>
+	  			</div>
+	  		</div>
+	  	</div>
+	</div>
+</div>
+
+
+<app-footer></app-footer>
